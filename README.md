@@ -1,21 +1,25 @@
 # Sen
 
-**TODO: Add description**
+(TO BE) A minimal Sentry client and Logger backend.
 
-## Installation
+Key features:
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `sen` to your list of dependencies in `mix.exs`:
+- minimal API
+- straightforward Logger integration
+
+# Usage
 
 ```elixir
-def deps do
-  [
-    {:sen, "~> 0.1.0"}
-  ]
-end
+iex> Mix.install([{:sen, github: "ruslandoga/sen"}])
+
+iex> config = [
+  level: :warning,
+  metadata: :all,
+  dsn: System.fetch_env!("SENTRY_DSN")
+]
+
+# TODO :logger.add_handler("sentry-errors", Sen.LoggerHandlers.Sentry, Map.new(config))
+iex> Logger.add_backend(Sen.LoggerBackends.Sentry)
+
+iex> spawn(fn -> 1 / 0 end)
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/sen>.
-

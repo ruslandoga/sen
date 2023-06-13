@@ -1,18 +1,5 @@
 defmodule Sen do
   @moduledoc """
-  Documentation for `Sen`.
+  A minimal Sentry client.
   """
-
-  @doc """
-  Hello world.
-
-  ## Examples
-
-      iex> Sen.hello()
-      :world
-
-  """
-  def hello do
-    :world
-  end
 end
