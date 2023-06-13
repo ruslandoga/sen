@@ -5,21 +5,36 @@
 Key features:
 
 - minimal API
-- straightforward Logger integration
+- straightforward integration
 
 # Usage
 
 ```elixir
-iex> Mix.install([{:sen, github: "ruslandoga/sen"}])
+Mix.install([{:sen, github: "ruslandoga/sen"}])
 
-iex> config = [
-  level: :warning,
+config = [
   metadata: :all,
+  level: :warning,
   dsn: System.fetch_env!("SENTRY_DSN")
 ]
 
-# TODO :logger.add_handler("sentry-errors", Sen.LoggerHandlers.Sentry, Map.new(config))
-iex> Logger.add_backend(Sen.LoggerBackends.Sentry)
+# add a Logger backend (for async requests to sentry servers)
+Application.put_env(:logger, Sen, config)
+{:ok, _pid} = Logger.add_backend(Sen)
 
-iex> spawn(fn -> 1 / 0 end)
+# or add a :logger handler (for sync requests to sentry servers)
+:ok = :logger.add_handler(:sentry, Sen, Map.new(config))
+
+# or add a :telemetry handler (for libraries suppressing error logs)
+# https://github.com/sorentwo/oban/tree/v2.15.1#reporting-errors
+:telemetry.attach(
+  "oban-errors",
+  [:oban, :job, :exception],
+  # some function that calls `Sen.captore_exception/2`,
+  &ErrorReporter.handle_event/4,
+  []
+)
+
+# try it out
+spawn(fn -> 1 / 0 end)
 ```
