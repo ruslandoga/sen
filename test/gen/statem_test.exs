@@ -1,0 +1,2 @@
+defmodule GenStatemTest do
+end

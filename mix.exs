@@ -22,8 +22,13 @@ defmodule Sen.MixProject do
   defp deps do
     [
       {:finch, "~> 0.16.0", optional: true},
+      # TODO
       # {:logger_backends, "~> 1.0.0-rc.0"},
-      {:dialyxir, "~> 1.3", only: :dev, runtime: false}
+      {:dialyxir, "~> 1.3", only: :dev, runtime: false},
+      {:benchee, "~> 1.1", only: :bench},
+      {:jason, "~> 1.4"},
+      {:plug, "~> 1.14", only: :test},
+      {:mox, "~> 1.0", only: :test}
     ]
   end
 end
